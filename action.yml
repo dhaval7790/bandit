@@ -125,7 +125,7 @@ runs:
         else
             INI="--ini $INPUT_INI"
         fi
-        bandit $CONFIGFILE $PROFILE $TESTS $SKIPS $SEVERITY $CONFIDENCE -x $INPUT_EXCLUDE $BASELINE $INI -r $INPUT_TARGETS -f sarif -o results.sarif || true
+        bandit $CONFIGFILE $PROFILE $TESTS $SKIPS $SEVERITY $CONFIDENCE -x $INPUT_EXCLUDE $BASELINE $INI -r $INPUT_TARGETS -f txt -o security_report.txt || true
       env:
         INPUT_CONFIGFILE: ${{ inputs.configfile }}
         INPUT_PROFILE: ${{ inputs.profile }}
@@ -137,5 +137,12 @@ runs:
         INPUT_BASELINE: ${{ inputs.baseline }}
         INPUT_INI: ${{ inputs.ini }}
         INPUT_TARGETS: ${{ inputs.targets }}
+
+    - name: Security check report artifacts
+      uses: actions/upload-artifact@v1
+      # if: failure()
+      with:
+        name: Security report
+        path: security_report.txt
 
 
